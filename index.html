@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Produtos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de Produtos</h1>
+        <input type="file" id="csvFileInput" accept=".csv" />
+        <input type="text" id="barcodeInput" placeholder="Escaneie ou digite o código de barras" />
+        <button class="primary" onclick="searchProduct()">🔍 Pesquisar</button>
+        <button class="secondary" onclick="startScanner()">📸 Escanear Código</button>
+
+        <div id="result">
+            <p><strong></strong> <span id="description"></span></p>
+            <p><strong></strong> <span id="price"></span></p>
+        </div>
+
+        <button class="primary" onclick="clearSearch()">➡ Próximo</button>
+        <button class="warning" onclick="reportWrongPrice()">⚠ Preço Errado</button>
+
+        <a id="downloadLink" class="hidden">📥 Baixar Lista de Preços Errados</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
