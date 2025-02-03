@@ -61,30 +61,30 @@ button {
 }
 
 button.primary {
-    background: #000102;
+    background: #007bff;
     color: white;
 }
 
 button.primary:hover {
-    background: #545658;
+    background: #0056b3;
 }
 
 button.secondary {
-    background: #6b726d;
+    background: #28a745;
     color: white;
 }
 
 button.secondary:hover {
-    background: #606360;
+    background: #218838;
 }
 
 button.warning {
-    background: #ff0000;
-    color: #fffafa;
+    background: #ffc107;
+    color: #333;
 }
 
 button.warning:hover {
-    background: #545658;
+    background: #e0a800;
 }
 
 #result {
@@ -103,3 +103,4 @@ button.warning:hover {
 .hidden {
     display: none;
 }
+
