@@ -41,6 +41,10 @@ function clearSearch() {
 
 // 📸 Função para Escanear Código de Barras
 function startScanner() {
+    if (document.getElementById("scanner-container")) {
+        return;
+    }
+
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
     scannerContainer.style.position = "fixed";
@@ -56,7 +60,7 @@ function startScanner() {
     scannerContainer.style.zIndex = "1000";
 
     const videoElement = document.createElement('div');
-    videoElement.id = "scanner-video";
+    videoElement.id = "interactive";
     scannerContainer.appendChild(videoElement);
 
     const closeButton = document.createElement('button');
@@ -65,7 +69,6 @@ function startScanner() {
     closeButton.style.marginTop = "20px";
     closeButton.onclick = function() {
         Quagga.stop();
-        Quagga.offDetected();
         document.body.removeChild(scannerContainer);
     };
     scannerContainer.appendChild(closeButton);
@@ -77,7 +80,7 @@ function startScanner() {
             type: "LiveStream",
             target: videoElement,
             constraints: {
-                facingMode: "environment", // Usa a câmera traseira
+                facingMode: "environment",
                 width: { ideal: 640 },
                 height: { ideal: 480 }
             }
@@ -100,7 +103,6 @@ function startScanner() {
         document.getElementById("barcodeInput").value = code;
         searchProduct();
         Quagga.stop();
-        Quagga.offDetected();
         document.body.removeChild(scannerContainer);
     });
 }
