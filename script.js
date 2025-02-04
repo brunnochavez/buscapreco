@@ -1,6 +1,5 @@
 let products = [];
 
-// 📂 Carregar arquivo Excel
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -39,8 +38,9 @@ function clearSearch() {
     document.getElementById('price').textContent = "";
 }
 
-// 📸 Função para Escanear Código de Barras
 function startScanner() {
+    clearSearch();
+
     if (document.getElementById("scanner-container")) {
         return;
     }
@@ -106,6 +106,7 @@ function startScanner() {
         document.body.removeChild(scannerContainer);
     });
 }
+
 
 
 
