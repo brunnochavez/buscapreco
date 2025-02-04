@@ -58,15 +58,19 @@ function startScanner() {
     scannerContainer.style.alignItems = "center";
     scannerContainer.style.flexDirection = "column";
     scannerContainer.style.zIndex = "1000";
+    scannerContainer.style.paddingBottom = "50px"; // Ajuste para deixar espaço para o botão
 
     const videoElement = document.createElement('div');
     videoElement.id = "interactive";
+    videoElement.style.flexGrow = "1";
     scannerContainer.appendChild(videoElement);
 
     const closeButton = document.createElement('button');
     closeButton.textContent = "Fechar Câmera";
     closeButton.className = "secondary";
-    closeButton.style.marginTop = "20px";
+    closeButton.style.marginTop = "30px";
+    closeButton.style.position = "relative";
+    closeButton.style.bottom = "-20px"; // Move o botão mais para baixo
     closeButton.onclick = function() {
         Quagga.stop();
         document.body.removeChild(scannerContainer);
