@@ -80,7 +80,7 @@ button.secondary {
 
 #result span {
     display: inline-block;
-    min-height: 24px; /* Aumenta a altura dos campos de descrição e preço */
+    min-height: 24px;
 }
 
 #scanner-container {
@@ -108,6 +108,7 @@ button.secondary {
     background: #dc3545;
     color: white;
 }
+
 
 
 
