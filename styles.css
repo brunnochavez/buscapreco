@@ -78,11 +78,6 @@ button.secondary {
     margin: 10px 0;
 }
 
-#result span {
-    display: inline-block;
-    min-height: 24px;
-}
-
 #scanner-container {
     position: fixed;
     top: 0;
@@ -108,6 +103,7 @@ button.secondary {
     background: #dc3545;
     color: white;
 }
+
 
 
 
