@@ -41,7 +41,10 @@ function clearSearch() {
 // 📸 Scanner de Código de Barras
 function startScanner() {
     const scannerContainer = document.getElementById("scanner-container");
+    const closeScanner = document.getElementById("closeScanner");
+
     scannerContainer.classList.remove("hidden");
+    closeScanner.style.display = "block";  // Exibir botão "Fechar"
 
     Quagga.init({
         inputStream: {
@@ -67,8 +70,7 @@ function startScanner() {
 
     Quagga.onDetected(result => {
         document.getElementById("barcodeInput").value = result.codeResult.code;
-        Quagga.stop();
-        scannerContainer.classList.add("hidden");
+        stopScanner();  // Fecha automaticamente após leitura
         searchProduct();
     });
 }
@@ -77,7 +79,9 @@ function startScanner() {
 function stopScanner() {
     Quagga.stop();
     document.getElementById("scanner-container").classList.add("hidden");
+    document.getElementById("closeScanner").style.display = "none"; // Ocultar botão "Fechar"
 }
+
 
 
 
