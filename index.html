@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Consulta de Produtos</h1>
-        <input type="file" id="csvFileInput" accept=".csv" />
+        <input type="file" id="excelFileInput" accept=".xlsx" />
         <input type="text" id="barcodeInput" placeholder="Escaneie ou digite o código de barras" />
         <button class="primary" onclick="searchProduct()">🔍 Pesquisar</button>
         <button class="secondary" onclick="startScanner()">📸 Escanear Código</button>
@@ -26,9 +26,11 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
