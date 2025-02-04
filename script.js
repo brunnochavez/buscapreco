@@ -1,5 +1,6 @@
 let products = [];
 
+// 📂 Carregar arquivo Excel
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -38,6 +39,7 @@ function clearSearch() {
     document.getElementById('price').textContent = "";
 }
 
+// 📸 Função para Escanear Código de Barras
 function startScanner() {
     clearSearch();
 
@@ -47,38 +49,16 @@ function startScanner() {
 
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
-    scannerContainer.style.position = "fixed";
-    scannerContainer.style.top = "0";
-    scannerContainer.style.left = "0";
-    scannerContainer.style.width = "100vw";
-    scannerContainer.style.height = "100vh";
-    scannerContainer.style.background = "rgba(0, 0, 0, 0.8)";
-    scannerContainer.style.display = "flex";
-    scannerContainer.style.justifyContent = "center";
-    scannerContainer.style.alignItems = "center";
-    scannerContainer.style.flexDirection = "column";
-    scannerContainer.style.zIndex = "1000";
+    scannerContainer.innerHTML = `<div id="interactive"></div>
+        <button class="secondary" style="margin-top: 20px;" onclick="stopScanner()">Fechar Câmera</button>`;
 
-    const videoElement = document.createElement('div');
-    videoElement.id = "interactive";
-    scannerContainer.appendChild(videoElement);
-
-    const closeButton = document.createElement('button');
-    closeButton.textContent = "Fechar Câmera";
-    closeButton.className = "secondary";
-    closeButton.style.marginTop = "20px";
-    closeButton.onclick = function() {
-        Quagga.stop();
-        document.body.removeChild(scannerContainer);
-    };
-    scannerContainer.appendChild(closeButton);
     document.body.appendChild(scannerContainer);
 
     Quagga.init({
         inputStream: {
             name: "Live",
             type: "LiveStream",
-            target: videoElement,
+            target: document.getElementById("interactive"),
             constraints: {
                 facingMode: "environment",
                 width: { ideal: 640 },
@@ -92,7 +72,7 @@ function startScanner() {
         if (err) {
             console.error(err);
             alert("Erro ao inicializar a câmera. Verifique as permissões.");
-            document.body.removeChild(scannerContainer);
+            stopScanner();
             return;
         }
         Quagga.start();
@@ -101,7 +81,7 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
 
-        // Evitar múltiplas leituras seguidas do mesmo código
+        // Evita múltiplas leituras repetidas do mesmo código
         if (document.getElementById("barcodeInput").value !== code) {
             document.getElementById("barcodeInput").value = code;
             searchProduct();
@@ -109,7 +89,14 @@ function startScanner() {
     });
 }
 
+function stopScanner() {
+    Quagga.stop();
+    const scannerContainer = document.getElementById("scanner-container");
+    if (scannerContainer) {
+        document.body.removeChild(scannerContainer);
+    }
 }
+
 
 
 
