@@ -81,11 +81,10 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
 
-        // Evita múltiplas leituras repetidas do mesmo código
-        if (document.getElementById("barcodeInput").value !== code) {
-            document.getElementById("barcodeInput").value = code;
-            searchProduct();
-        }
+        // Se um código for lido, fechamos o scanner automaticamente
+        document.getElementById("barcodeInput").value = code;
+        searchProduct();
+        stopScanner();
     });
 }
 
@@ -96,6 +95,7 @@ function stopScanner() {
         document.body.removeChild(scannerContainer);
     }
 }
+
 
 
 
