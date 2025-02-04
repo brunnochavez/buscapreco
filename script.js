@@ -21,7 +21,7 @@ document.getElementById('excelFileInput').addEventListener('change', function(ev
 });
 
 function searchProduct() {
-    const barcode = document.getElementById('barcodeInput').value;
+    const barcode = document.getElementById('barcodeInput').value.trim();
     const product = products.find(p => p.barras === barcode);
     
     if (product) {
@@ -44,15 +44,17 @@ function startScanner() {
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
 
-    // Adiciona um botão de fechar
+    const videoElement = document.createElement('video');
+    videoElement.id = "scanner-video";
+    scannerContainer.appendChild(videoElement);
+
     const closeButton = document.createElement('button');
     closeButton.textContent = "Fechar Câmera";
-    closeButton.className = "primary";
+    closeButton.className = "secondary";
     closeButton.onclick = function() {
         Quagga.stop();
         document.body.removeChild(scannerContainer);
     };
-
     scannerContainer.appendChild(closeButton);
     document.body.appendChild(scannerContainer);
 
@@ -60,11 +62,11 @@ function startScanner() {
         inputStream: {
             name: "Live",
             type: "LiveStream",
-            target: scannerContainer,
+            target: videoElement,
             constraints: {
                 facingMode: "environment", // Usa a câmera traseira
-                width: { ideal: 640 },
-                height: { ideal: 480 }
+                width: 640,
+                height: 480
             }
         },
         decoder: {
