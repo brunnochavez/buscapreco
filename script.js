@@ -1,5 +1,4 @@
 let products = [];
-let wrongPrices = [];
 
 // 📂 Carregar arquivo Excel
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
@@ -40,73 +39,9 @@ function clearSearch() {
     document.getElementById('price').textContent = "";
 }
 
-function reportWrongPrice() {
-    const barcode = document.getElementById('barcodeInput').value;
-    const product = products.find(p => p.barras === barcode);
-    
-    if (product) {
-        wrongPrices.push(product);
-        updateCSV();
-    }
-}
-
-function updateCSV() {
-    let csvContent = "data:text/csv;charset=utf-8,Barras;Descrição;Preço\n" +
-        wrongPrices.map(p => `${p.barras};${p.descricao};${p.preco}`).join("\n");
-
-    let encodedUri = encodeURI(csvContent);
-    let link = document.getElementById('downloadLink');
-    link.href = encodedUri;
-    link.download = "precos_errados.csv";
-    link.style.display = "block";
-}
-
 // 📸 Função para Escanear Código de Barras
 function startScanner() {
-    const scannerContainer = document.createElement('div');
-    scannerContainer.id = "scanner-container";
-    scannerContainer.style.position = "fixed";
-    scannerContainer.style.top = "0";
-    scannerContainer.style.left = "0";
-    scannerContainer.style.width = "100vw";
-    scannerContainer.style.height = "100vh";
-    scannerContainer.style.background = "rgba(0, 0, 0, 0.8)";
-    scannerContainer.style.display = "flex";
-    scannerContainer.style.justifyContent = "center";
-    scannerContainer.style.alignItems = "center";
-    scannerContainer.style.zIndex = "1000";
-
-    Quagga.init({
-        inputStream: {
-            name: "Live",
-            type: "LiveStream",
-            target: scannerContainer,
-            constraints: {
-                facingMode: "environment",
-                width: { ideal: 1920 },
-                height: { ideal: 1080 }
-            }
-        },
-        decoder: {
-            readers: ["ean_reader", "code_128_reader"]
-        }
-    }, function(err) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        Quagga.start();
-    });
-
-    Quagga.onDetected(result => {
-        document.getElementById("barcodeInput").value = result.codeResult.code;
-        Quagga.stop();
-        document.body.removeChild(scannerContainer);
-        searchProduct();
-    });
-
-    document.body.appendChild(scannerContainer);
-}
+    const scannerContainer = document.createElement('div
 
 
 
