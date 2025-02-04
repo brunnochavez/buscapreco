@@ -65,9 +65,8 @@ function startScanner() {
     closeButton.style.marginTop = "20px";
     closeButton.onclick = function() {
         Quagga.stop();
-        if (document.body.contains(scannerContainer)) {
-            document.body.removeChild(scannerContainer);
-        }
+        Quagga.offDetected();
+        document.body.removeChild(scannerContainer);
     };
     scannerContainer.appendChild(closeButton);
     document.body.appendChild(scannerContainer);
@@ -79,8 +78,8 @@ function startScanner() {
             target: videoElement,
             constraints: {
                 facingMode: "environment", // Usa a câmera traseira
-                width: 640,
-                height: 480
+                width: { ideal: 640 },
+                height: { ideal: 480 }
             }
         },
         decoder: {
@@ -90,9 +89,7 @@ function startScanner() {
         if (err) {
             console.error(err);
             alert("Erro ao inicializar a câmera. Verifique as permissões.");
-            if (document.body.contains(scannerContainer)) {
-                document.body.removeChild(scannerContainer);
-            }
+            document.body.removeChild(scannerContainer);
             return;
         }
         Quagga.start();
@@ -101,13 +98,13 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
         document.getElementById("barcodeInput").value = code;
-        Quagga.stop();
-        if (document.body.contains(scannerContainer)) {
-            document.body.removeChild(scannerContainer);
-        }
         searchProduct();
+        Quagga.stop();
+        Quagga.offDetected();
+        document.body.removeChild(scannerContainer);
     });
 }
+
 
 
 
