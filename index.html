@@ -24,11 +24,18 @@
         <button class="primary" onclick="clearSearch()">➡ Próximo</button>
     </div>
 
+    <!-- Container da Câmera (Tela Cheia) -->
+    <div id="scanner-container" class="hidden">
+        <video id="scanner-video"></video>
+        <button id="closeScanner" onclick="stopScanner()">✖ Fechar</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
