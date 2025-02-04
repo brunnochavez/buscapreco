@@ -1,5 +1,7 @@
 let products = [];
+let wrongPrices = [];
 
+// 📂 Carregar arquivo Excel
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -22,7 +24,7 @@ document.getElementById('excelFileInput').addEventListener('change', function(ev
 function searchProduct() {
     const barcode = document.getElementById('barcodeInput').value;
     const product = products.find(p => p.barras === barcode);
-
+    
     if (product) {
         document.getElementById('description').textContent = product.descricao;
         document.getElementById('price').textContent = parseFloat(product.preco.replace(',', '.')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -38,19 +40,47 @@ function clearSearch() {
     document.getElementById('price').textContent = "";
 }
 
-// 📸 Scanner de Código de Barras
-function startScanner() {
-    const scannerContainer = document.getElementById("scanner-container");
-    const closeScanner = document.getElementById("closeScanner");
+function reportWrongPrice() {
+    const barcode = document.getElementById('barcodeInput').value;
+    const product = products.find(p => p.barras === barcode);
+    
+    if (product) {
+        wrongPrices.push(product);
+        updateCSV();
+    }
+}
 
-    scannerContainer.classList.remove("hidden");
-    closeScanner.style.display = "block";  // Exibir botão "Fechar"
+function updateCSV() {
+    let csvContent = "data:text/csv;charset=utf-8,Barras;Descrição;Preço\n" +
+        wrongPrices.map(p => `${p.barras};${p.descricao};${p.preco}`).join("\n");
+
+    let encodedUri = encodeURI(csvContent);
+    let link = document.getElementById('downloadLink');
+    link.href = encodedUri;
+    link.download = "precos_errados.csv";
+    link.style.display = "block";
+}
+
+// 📸 Função para Escanear Código de Barras
+function startScanner() {
+    const scannerContainer = document.createElement('div');
+    scannerContainer.id = "scanner-container";
+    scannerContainer.style.position = "fixed";
+    scannerContainer.style.top = "0";
+    scannerContainer.style.left = "0";
+    scannerContainer.style.width = "100vw";
+    scannerContainer.style.height = "100vh";
+    scannerContainer.style.background = "rgba(0, 0, 0, 0.8)";
+    scannerContainer.style.display = "flex";
+    scannerContainer.style.justifyContent = "center";
+    scannerContainer.style.alignItems = "center";
+    scannerContainer.style.zIndex = "1000";
 
     Quagga.init({
         inputStream: {
             name: "Live",
             type: "LiveStream",
-            target: document.getElementById("scanner-video"),
+            target: scannerContainer,
             constraints: {
                 facingMode: "environment",
                 width: { ideal: 1920 },
@@ -70,17 +100,14 @@ function startScanner() {
 
     Quagga.onDetected(result => {
         document.getElementById("barcodeInput").value = result.codeResult.code;
-        stopScanner();  // Fecha automaticamente após leitura
+        Quagga.stop();
+        document.body.removeChild(scannerContainer);
         searchProduct();
     });
+
+    document.body.appendChild(scannerContainer);
 }
 
-// ❌ Fechar Scanner Manualmente
-function stopScanner() {
-    Quagga.stop();
-    document.getElementById("scanner-container").classList.add("hidden");
-    document.getElementById("closeScanner").style.display = "none"; // Ocultar botão "Fechar"
-}
 
 
 
