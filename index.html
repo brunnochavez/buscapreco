@@ -15,14 +15,13 @@
         <button class="secondary" onclick="startScanner()">📸 Escanear Código</button>
 
         <div id="result">
-            <p><strong></strong> <span id="description"></span></p>
-            <p><strong></strong> <span id="price"></span></p>
+            <p><strong>Descrição:</strong></p>
+            <div id="description"></div>
+            <p><strong>Preço:</strong></p>
+            <div id="price"></div>
         </div>
 
         <button class="primary" onclick="clearSearch()">➡ Próximo</button>
-        <button class="warning" onclick="reportWrongPrice()">⚠ Preço Errado</button>
-
-        <a id="downloadLink" class="hidden">📥 Baixar Lista de Preços Errados</a>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
@@ -30,6 +29,7 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
