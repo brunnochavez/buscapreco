@@ -43,17 +43,31 @@ function clearSearch() {
 function startScanner() {
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
+    scannerContainer.style.position = "fixed";
+    scannerContainer.style.top = "0";
+    scannerContainer.style.left = "0";
+    scannerContainer.style.width = "100vw";
+    scannerContainer.style.height = "100vh";
+    scannerContainer.style.background = "rgba(0, 0, 0, 0.8)";
+    scannerContainer.style.display = "flex";
+    scannerContainer.style.justifyContent = "center";
+    scannerContainer.style.alignItems = "center";
+    scannerContainer.style.flexDirection = "column";
+    scannerContainer.style.zIndex = "1000";
 
-    const videoElement = document.createElement('video');
+    const videoElement = document.createElement('div');
     videoElement.id = "scanner-video";
     scannerContainer.appendChild(videoElement);
 
     const closeButton = document.createElement('button');
     closeButton.textContent = "Fechar Câmera";
     closeButton.className = "secondary";
+    closeButton.style.marginTop = "20px";
     closeButton.onclick = function() {
         Quagga.stop();
-        document.body.removeChild(scannerContainer);
+        if (document.body.contains(scannerContainer)) {
+            document.body.removeChild(scannerContainer);
+        }
     };
     scannerContainer.appendChild(closeButton);
     document.body.appendChild(scannerContainer);
@@ -76,7 +90,9 @@ function startScanner() {
         if (err) {
             console.error(err);
             alert("Erro ao inicializar a câmera. Verifique as permissões.");
-            document.body.removeChild(scannerContainer);
+            if (document.body.contains(scannerContainer)) {
+                document.body.removeChild(scannerContainer);
+            }
             return;
         }
         Quagga.start();
@@ -86,7 +102,9 @@ function startScanner() {
         const code = result.codeResult.code;
         document.getElementById("barcodeInput").value = code;
         Quagga.stop();
-        document.body.removeChild(scannerContainer);
+        if (document.body.contains(scannerContainer)) {
+            document.body.removeChild(scannerContainer);
+        }
         searchProduct();
     });
 }
