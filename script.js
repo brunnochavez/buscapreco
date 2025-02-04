@@ -100,11 +100,15 @@ function startScanner() {
 
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
-        document.getElementById("barcodeInput").value = code;
-        searchProduct();
-        Quagga.stop();
-        document.body.removeChild(scannerContainer);
+
+        // Evitar múltiplas leituras seguidas do mesmo código
+        if (document.getElementById("barcodeInput").value !== code) {
+            document.getElementById("barcodeInput").value = code;
+            searchProduct();
+        }
     });
+}
+
 }
 
 
