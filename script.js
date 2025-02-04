@@ -41,7 +41,53 @@ function clearSearch() {
 
 // 📸 Função para Escanear Código de Barras
 function startScanner() {
-    const scannerContainer = document.createElement('div
+    const scannerContainer = document.createElement('div');
+    scannerContainer.id = "scanner-container";
+
+    // Adiciona um botão de fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = "Fechar Câmera";
+    closeButton.className = "primary";
+    closeButton.onclick = function() {
+        Quagga.stop();
+        document.body.removeChild(scannerContainer);
+    };
+
+    scannerContainer.appendChild(closeButton);
+    document.body.appendChild(scannerContainer);
+
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: scannerContainer,
+            constraints: {
+                facingMode: "environment", // Usa a câmera traseira
+                width: { ideal: 640 },
+                height: { ideal: 480 }
+            }
+        },
+        decoder: {
+            readers: ["ean_reader", "code_128_reader"]
+        }
+    }, function(err) {
+        if (err) {
+            console.error(err);
+            alert("Erro ao inicializar a câmera. Verifique as permissões.");
+            document.body.removeChild(scannerContainer);
+            return;
+        }
+        Quagga.start();
+    });
+
+    Quagga.onDetected(function(result) {
+        const code = result.codeResult.code;
+        document.getElementById("barcodeInput").value = code;
+        Quagga.stop();
+        document.body.removeChild(scannerContainer);
+        searchProduct();
+    });
+}
 
 
 
