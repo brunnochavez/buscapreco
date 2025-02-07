@@ -1,4 +1,5 @@
 let products = [];
+let scannerActive = false;
 
 // 📂 Carregar arquivo Excel
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
@@ -43,14 +44,17 @@ function clearSearch() {
 function startScanner() {
     clearSearch();
 
-    if (document.getElementById("scanner-container")) {
+    if (scannerActive) {
         return;
     }
+
+    scannerActive = true;
 
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
     scannerContainer.innerHTML = `<div id="interactive"></div>
-        <button class="secondary" style="margin-top: 20px;" onclick="stopScanner()">Fechar Câmera</button>`;
+        <button class="secondary" style="margin-top: 20px;" onclick="stopScanner()">Fechar Câmera</button>
+        <button class="secondary" style="margin-top: 10px; background: #6c757d;" onclick="cancelScanner()">Voltar sem Ler</button>`;
 
     document.body.appendChild(scannerContainer);
 
@@ -67,7 +71,12 @@ function startScanner() {
         },
         decoder: {
             readers: ["ean_reader", "code_128_reader"]
-        }
+        },
+        locator: {
+            halfSample: true,
+            patchSize: "large",
+        },
+        locate: true,
     }, function(err) {
         if (err) {
             console.error(err);
@@ -80,6 +89,9 @@ function startScanner() {
 
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
+
+        // Reproduzir som de "bip"
+        document.getElementById("bipSound").play();
 
         // Se um código for lido, fechamos o scanner automaticamente
         document.getElementById("barcodeInput").value = code;
@@ -94,8 +106,13 @@ function stopScanner() {
     if (scannerContainer) {
         document.body.removeChild(scannerContainer);
     }
+    scannerActive = false;
 }
 
+function cancelScanner() {
+    stopScanner();
+    alert("Leitura cancelada. Você pode tentar novamente.");
+}
 
 
 
