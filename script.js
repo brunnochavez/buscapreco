@@ -98,8 +98,7 @@ function startScanner() {
         // Verificar se o código é um EAN-13 válido (13 dígitos)
         if (code.length === 13) {
             // Reproduzir som de "bip"
-            const bipSound = document.getElementById("bipSound");
-            bipSound.play();
+            document.getElementById("bipSound").play();
 
             // Preencher o campo de código de barras e pesquisar
             document.getElementById("barcodeInput").value = code;
