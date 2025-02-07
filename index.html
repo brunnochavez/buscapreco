@@ -9,23 +9,41 @@
 <body>
     <div class="container">
         <h1>Consulta de Produtos</h1>
-        <input type="file" id="excelFileInput" accept=".xlsx" />
         <input type="text" id="barcodeInput" placeholder="Escaneie ou digite o código de barras" />
         <button class="primary" onclick="searchProduct()">🔍 Pesquisar</button>
         <button class="secondary" onclick="clearSearch(); startScanner();">📸 Escanear Código</button>
 
         <div id="result">
-            <p><strong></strong> <span id="description"></span></p>
-            <p><strong></strong> <span id="price"></span></p>
+            <p><strong>Descrição:</strong> <span id="description"></span></p>
+            <p><strong>Preço:</strong> <span id="price"></span></p>
         </div>
     </div>
 
-    <!-- Áudio para o som de "bip" -->
     <audio id="bipSound" src="bip.mp3"></audio>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+
+        function searchProduct() {
+            const barcode = document.getElementById('barcodeInput').value.trim();
+            const product = products.find(p => p.barras === barcode);
+            
+            if (product) {
+                document.getElementById('description').textContent = product.descricao;
+                document.getElementById('price').textContent = parseFloat(product.preco.replace(',', '.')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            } else {
+                document.getElementById('description').textContent = 'Produto não encontrado';
+                document.getElementById('price').textContent = '';
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('barcodeInput').value = "";
+            document.getElementById('description').textContent = "";
+            document.getElementById('price').textContent = "";
+        }
+    </script>
 </body>
 </html>
 
