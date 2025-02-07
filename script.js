@@ -1,7 +1,7 @@
 let products = [];
 let scannerActive = false;
 
-// 📂 Carregar arquivo Excel
+// 📂 Carregar arquivo Excel e converter para JSON
 document.getElementById('excelFileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -9,18 +9,21 @@ document.getElementById('excelFileInput').addEventListener('change', function(ev
         reader.onload = function(e) {
             const workbook = XLSX.read(e.target.result, { type: 'binary' });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            const data = XLSX.utils.sheet_to_json(sheet, { header: ["barras", "descricao", "preco"] });
 
-            products = data.slice(1).map(row => ({
-                barras: row[0]?.toString().trim(),
-                descricao: row[1]?.toString().trim(),
-                preco: row[2]?.toString().trim()
+            products = data.map(row => ({
+                barras: row.barras?.toString().trim(),
+                descricao: row.descricao?.toString().trim(),
+                preco: row.preco?.toString().trim()
             })).filter(item => item.barras);
+            
+            alert("Arquivo carregado com sucesso!");
         };
         reader.readAsBinaryString(file);
     }
 });
 
+// 🔎 Buscar produto pelo código de barras
 function searchProduct() {
     const barcode = document.getElementById('barcodeInput').value.trim();
     const product = products.find(p => p.barras === barcode);
@@ -34,31 +37,48 @@ function searchProduct() {
     }
 }
 
+// 🧹 Limpar busca
 function clearSearch() {
     document.getElementById('barcodeInput').value = "";
     document.getElementById('description').textContent = "";
     document.getElementById('price').textContent = "";
 }
 
-// 📸 Função para Escanear Código de Barras
+// 💾 Salvar produtos no LocalStorage
+function saveProductsToLocal() {
+    if (products.length > 0) {
+        localStorage.setItem("products", JSON.stringify(products));
+        alert("Lista de produtos salva!");
+    } else {
+        alert("Nenhum produto carregado para salvar.");
+    }
+}
+
+// 📥 Exportar JSON
+function exportJSON() {
+    const jsonString = JSON.stringify(products, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "produtos.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// 📸 Scanner de código de barras
 function startScanner() {
     clearSearch();
 
-    if (scannerActive) {
-        return;
-    }
-
+    if (scannerActive) return;
     scannerActive = true;
 
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
     scannerContainer.innerHTML = `
         <div id="interactive" class="scanner-view"></div>
-        <div class="scanner-buttons">
-            <button class="secondary" onclick="stopScanner()">Fechar Câmera</button>
-        </div>
+        <button class="secondary" onclick="stopScanner()">Fechar Câmera</button>
     `;
-
     document.body.appendChild(scannerContainer);
 
     Quagga.init({
@@ -66,55 +86,29 @@ function startScanner() {
             name: "Live",
             type: "LiveStream",
             target: document.querySelector("#interactive"),
-            constraints: {
-                facingMode: "environment", // Usar a câmera traseira
-                width: { ideal: 640 },
-                height: { ideal: 480 }
-            }
+            constraints: { facingMode: "environment" }
         },
-        decoder: {
-            readers: ["ean_reader"], // Focar apenas no leitor de EAN-13
-        },
-        locator: {
-            halfSample: true,
-            patchSize: "medium", // Tamanho do patch para detecção
-        },
-        locate: true,
-        numOfWorkers: 4, // Usar mais workers para melhorar a performance
-        frequency: 10, // Verificar a cada 10ms
+        decoder: { readers: ["ean_reader"] },
     }, function(err) {
         if (err) {
-            console.error(err);
-            alert("Erro ao inicializar a câmera. Verifique as permissões.");
+            alert("Erro ao inicializar câmera.");
             stopScanner();
-            return;
+        } else {
+            Quagga.start();
         }
-        Quagga.start();
     });
 
-    Quagga.onDetected(function(result) {
-        const code = result.codeResult.code;
-
-        // Verificar se o código é um EAN-13 válido (13 dígitos)
-        if (code.length === 13) {
-            // Reproduzir som de "bip"
-            const bipSound = document.getElementById("bipSound");
-            bipSound.play();
-
-            // Preencher o campo de código de barras e pesquisar
-            document.getElementById("barcodeInput").value = code;
-            searchProduct();
-            stopScanner();
-        }
+    Quagga.onDetected(result => {
+        document.getElementById("barcodeInput").value = result.codeResult.code;
+        searchProduct();
+        stopScanner();
     });
 }
 
+// ❌ Parar Scanner
 function stopScanner() {
     Quagga.stop();
-    const scannerContainer = document.getElementById("scanner-container");
-    if (scannerContainer) {
-        document.body.removeChild(scannerContainer);
-    }
+    document.getElementById("scanner-container")?.remove();
     scannerActive = false;
 }
 
