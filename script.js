@@ -68,8 +68,9 @@ function startScanner() {
             target: document.querySelector("#interactive"),
             constraints: {
                 facingMode: "environment", // Usar a câmera traseira
-                width: { ideal: 640 },
-                height: { ideal: 480 }
+                width: { ideal: 1280 }, // Aumentar a resolução
+                height: { ideal: 720 },
+                aspectRatio: { ideal: 1.7777777778 } // 16:9
             }
         },
         decoder: {
@@ -77,7 +78,7 @@ function startScanner() {
         },
         locator: {
             halfSample: true,
-            patchSize: "medium", // Tamanho do patch para detecção
+            patchSize: "large", // Tamanho do patch para detecção
         },
         locate: true,
         numOfWorkers: 4, // Usar mais workers para melhorar a performance
@@ -98,7 +99,8 @@ function startScanner() {
         // Verificar se o código é um EAN-13 válido (13 dígitos)
         if (code.length === 13) {
             // Reproduzir som de "bip"
-            document.getElementById("bipSound").play();
+            const bipSound = document.getElementById("bipSound");
+            bipSound.play();
 
             // Preencher o campo de código de barras e pesquisar
             document.getElementById("barcodeInput").value = code;
@@ -114,9 +116,7 @@ function stopScanner() {
     if (scannerContainer) {
         document.body.removeChild(scannerContainer);
     }
-    scannerActive = false;
-}
-
+    scannerActive =
 
 
 
