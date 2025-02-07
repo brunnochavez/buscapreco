@@ -56,7 +56,6 @@ function startScanner() {
         <div id="interactive" class="scanner-view"></div>
         <div class="scanner-buttons">
             <button class="secondary" onclick="stopScanner()">Fechar Câmera</button>
-            <button class="secondary" style="background: #6c757d;" onclick="cancelScanner()">Voltar sem Ler</button>
         </div>
     `;
 
@@ -112,12 +111,6 @@ function stopScanner() {
     }
     scannerActive = false;
 }
-
-function cancelScanner() {
-    stopScanner();
-    alert("Leitura cancelada. Você pode tentar novamente.");
-}
-
 
 
 
