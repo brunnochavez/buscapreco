@@ -52,9 +52,13 @@ function startScanner() {
 
     const scannerContainer = document.createElement('div');
     scannerContainer.id = "scanner-container";
-    scannerContainer.innerHTML = `<div id="interactive"></div>
-        <button class="secondary" style="margin-top: 20px;" onclick="stopScanner()">Fechar Câmera</button>
-        <button class="secondary" style="margin-top: 10px; background: #6c757d;" onclick="cancelScanner()">Voltar sem Ler</button>`;
+    scannerContainer.innerHTML = `
+        <div id="interactive" class="scanner-view"></div>
+        <div class="scanner-buttons">
+            <button class="secondary" onclick="stopScanner()">Fechar Câmera</button>
+            <button class="secondary" style="background: #6c757d;" onclick="cancelScanner()">Voltar sem Ler</button>
+        </div>
+    `;
 
     document.body.appendChild(scannerContainer);
 
@@ -62,7 +66,7 @@ function startScanner() {
         inputStream: {
             name: "Live",
             type: "LiveStream",
-            target: document.getElementById("interactive"),
+            target: document.querySelector("#interactive"),
             constraints: {
                 facingMode: "environment",
                 width: { ideal: 640 },
@@ -113,7 +117,6 @@ function cancelScanner() {
     stopScanner();
     alert("Leitura cancelada. Você pode tentar novamente.");
 }
-
 
 
 
