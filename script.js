@@ -67,19 +67,21 @@ function startScanner() {
             type: "LiveStream",
             target: document.querySelector("#interactive"),
             constraints: {
-                facingMode: "environment",
+                facingMode: "environment", // Usar a câmera traseira
                 width: { ideal: 640 },
                 height: { ideal: 480 }
             }
         },
         decoder: {
-            readers: ["ean_reader", "code_128_reader"]
+            readers: ["ean_reader"], // Focar apenas no leitor de EAN-13
         },
         locator: {
             halfSample: true,
-            patchSize: "large",
+            patchSize: "medium", // Tamanho do patch para detecção
         },
         locate: true,
+        numOfWorkers: 4, // Usar mais workers para melhorar a performance
+        frequency: 10, // Verificar a cada 10ms
     }, function(err) {
         if (err) {
             console.error(err);
@@ -93,13 +95,16 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
 
-        // Reproduzir som de "bip"
-        document.getElementById("bipSound").play();
+        // Verificar se o código é um EAN-13 válido (13 dígitos)
+        if (code.length === 13) {
+            // Reproduzir som de "bip"
+            document.getElementById("bipSound").play();
 
-        // Se um código for lido, fechamos o scanner automaticamente
-        document.getElementById("barcodeInput").value = code;
-        searchProduct();
-        stopScanner();
+            // Preencher o campo de código de barras e pesquisar
+            document.getElementById("barcodeInput").value = code;
+            searchProduct();
+            stopScanner();
+        }
     });
 }
 
@@ -111,7 +116,6 @@ function stopScanner() {
     }
     scannerActive = false;
 }
-
 
 
 
