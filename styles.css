@@ -8,7 +8,7 @@
 }
 
 body {
-    background-color: #f8f9fa;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +19,7 @@ body {
 .container {
     background: #ffffff;
     padding: 30px;
-    border-radius: 12px;
+    border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
@@ -42,6 +42,14 @@ input[type="text"] {
     margin-bottom: 15px;
     font-size: 16px;
     transition: 0.3s;
+    background-color: #f9f9f9;
+}
+
+input[type="file"]:focus,
+input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 button {
@@ -60,9 +68,17 @@ button.primary {
     color: white;
 }
 
+button.primary:hover {
+    background: #0056b3;
+}
+
 button.secondary {
     background: #28a745;
     color: white;
+}
+
+button.secondary:hover {
+    background: #218838;
 }
 
 #result {
@@ -76,6 +92,12 @@ button.secondary {
 
 #result p {
     margin: 10px 0;
+}
+
+#price {
+    font-size: 20px; /* Aumentei o tamanho da fonte */
+    font-weight: bold; /* Coloquei em negrito */
+    color: #28a745; /* Adicionei uma cor verde para destacar */
 }
 
 #scanner-container {
@@ -132,6 +154,8 @@ button.secondary {
     width: 200px;
     margin: 0;
 }
+
+
 
 
 
