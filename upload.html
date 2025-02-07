@@ -1,1 +1,33 @@
-
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload JSON</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload de Arquivo JSON</h1>
+        <input type="file" id="jsonFileInput" accept=".json" />
+        <button class="primary" onclick="uploadJSON()">📂 Carregar JSON</button>
+    </div>
+    
+    <script>
+        function uploadJSON() {
+            const fileInput = document.getElementById('jsonFileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const jsonData = JSON.parse(event.target.result);
+                    localStorage.setItem('products', JSON.stringify(jsonData));
+                    alert('Dados armazenados com sucesso no sistema!');
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Por favor, selecione um arquivo JSON.');
+            }
+        }
+    </script>
+</body>
+</html>
