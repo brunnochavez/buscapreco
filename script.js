@@ -116,8 +116,8 @@ function stopScanner() {
     if (scannerContainer) {
         document.body.removeChild(scannerContainer);
     }
-    scannerActive =
-
+    scannerActive = false;
+}
 
 
 
