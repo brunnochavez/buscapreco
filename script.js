@@ -68,9 +68,8 @@ function startScanner() {
             target: document.querySelector("#interactive"),
             constraints: {
                 facingMode: "environment", // Usar a câmera traseira
-                width: { ideal: 1280 }, // Aumentar a resolução
-                height: { ideal: 720 },
-                aspectRatio: { ideal: 1.7777777778 } // 16:9
+                width: { ideal: 640 },
+                height: { ideal: 480 }
             }
         },
         decoder: {
@@ -78,7 +77,7 @@ function startScanner() {
         },
         locator: {
             halfSample: true,
-            patchSize: "large", // Tamanho do patch para detecção
+            patchSize: "medium", // Tamanho do patch para detecção
         },
         locate: true,
         numOfWorkers: 4, // Usar mais workers para melhorar a performance
