@@ -94,6 +94,12 @@ button.secondary:hover {
     margin: 10px 0;
 }
 
+#price {
+    font-size: 20px; /* Aumentei o tamanho da fonte */
+    font-weight: bold; /* Coloquei em negrito */
+    color: #28a745; /* Adicionei uma cor verde para destacar */
+}
+
 #scanner-container {
     position: fixed;
     top: 0;
